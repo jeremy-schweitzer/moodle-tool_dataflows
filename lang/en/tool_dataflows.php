@@ -379,6 +379,7 @@ $string['flow_web_service:parameters'] = 'Parameters';
 $string['flow_web_service:parameters_help'] = 'Parameters passed to the webservice in JSON format';
 $string['flow_web_service:failure'] = 'Failure processing';
 $string['flow_web_service:failure_help'] = 'In case web service call fails, either record, abort step only or abort entire flow';
+$string['flow_web_service:field_failure_help'] = 'In case an error occurs you are able to reference it in a subsequent step like so: <code>${{ steps.step_alias.error }}</code>';
 $string['flow_web_service:abortstep'] = 'Abort step';
 $string['flow_web_service:abortflow'] = 'Abort flow';
 $string['flow_web_service:field_parameters_help'] = 'Parameters should be in the following YAML format: {$a->yaml} You can also use the following JSON format <br> Note: Structure depends on webservice called

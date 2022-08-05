@@ -101,6 +101,7 @@ class flow_web_service extends flow_step {
             ]
         );
         $mform->addHelpButton('config_failure', 'flow_web_service:failure', 'tool_dataflows');
+        $mform->addElement('static', 'failure_help', '', get_string('flow_web_service:field_failure_help', 'tool_dataflows'));
         $mform->addElement('text' , 'config_path', get_string('flow_web_service:path', 'tool_dataflows'));
         $mform->hideIf('config_path', 'config_failure', 'neq', 'record');
         $mform->disabledIf('config_path', 'config_failure', 'neq', 'record');
@@ -201,6 +202,7 @@ class flow_web_service extends flow_step {
             $SESSION = $session;
             $OUTPUT = $currentoutput;
             if ($response['error']) {
+                $this->set_variables('error', $response);
                 if (!$outertransaction && $DB->is_transaction_started()) {
                     $DB->force_transaction_rollback();
                 }
@@ -215,6 +217,7 @@ class flow_web_service extends flow_step {
             // Success - store any desired value for subsequent steps.
             // Output will then evaluate result.
             $this->set_variables('result', $response['data']);
+            $this->set_variables('error', false);
         }
         return $input;
     }
