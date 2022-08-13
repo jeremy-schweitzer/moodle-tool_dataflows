@@ -33,6 +33,24 @@ use tool_dataflows\local\provider\expression_provider;
  */
 class parser {
 
+    /** @var parser A singleton instance of the parser object. */
+    private static $parser = null;
+
+    /**
+     * Gets the parser.
+     *
+     * @return parser
+     */
+    public static function get_parser(): parser {
+        if (!isset(self::$parser)) {
+            self::$parser = new parser();
+        }
+        return self::$parser;
+    }
+
+    /** @var ExpressionLanguage The language used to parse expressions. */
+    private $expressionlanguage;
+
     /**
      * Constructor for the parser
      *
