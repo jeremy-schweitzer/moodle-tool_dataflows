@@ -19,7 +19,7 @@ namespace tool_dataflows\local\step;
 use tool_dataflows\helper;
 
 /**
- * S3 connector step type
+ * S3 flow step
  *
  * @package    tool_dataflows
  * @author     Peter Burnettt <peterburnett@catalyst-au.net>
@@ -27,7 +27,13 @@ use tool_dataflows\helper;
  * @copyright  Catalyst IT, 2022
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class connector_s3 extends flow_step {
+class flow_s3 extends flow_step {
+
+    /** @var int[] number of output flows (min, max). */
+    protected $outputflows = [0, 1];
+
+    /** @var int[] number of output connectors (min, max). */
+    protected $outputconnectors = [0, 1];
 
     /** @var string the prefix identifier for an s3 path, e.g. s3://path/to/file. */
     const S3_PREFIX = 's3://';
@@ -94,9 +100,9 @@ class connector_s3 extends flow_step {
      *
      * This will take the input and perform S3 interaction functions.
      *
-     * @return bool Returns true if successful, false otherwise.
+     * @return mixed
      */
-    public function execute($input): bool {
+    public function execute($input) {
         global $CFG;
         // Engine step contains the execution context, configuration, variables etc.
 
@@ -106,7 +112,7 @@ class connector_s3 extends flow_step {
         } catch (\Exception $e) {
             // TODO specific exception.
             $this->enginestep->log(get_string('local_aws_missing', 'tool_dataflows'));
-            return false;
+            return $input;
         }
 
         $config = $this->get_config();
@@ -126,7 +132,7 @@ class connector_s3 extends flow_step {
         } catch (\Exception $e) {
             // TODO specific exception.
             $this->enginestep->log(get_string('s3_configuration_error', 'tool_dataflows'));
-            return false;
+            return $input;
         }
 
         // Check source path.
@@ -145,7 +151,7 @@ class connector_s3 extends flow_step {
         // Do not execute s3 operations during a dry run.
         if ($this->enginestep->engine->isdryrun) {
             $this->enginestep->log("Skipping copy to '{$target}' as this is a dry run.");
-            return true;
+            return $input;
         }
 
         // PUT - Handle local source file to s3 path.
@@ -153,7 +159,7 @@ class connector_s3 extends flow_step {
             @$stream = fopen($source, 'r');
             if ($stream === false) {
                 $this->enginestep->log(get_string('missing_source_file', 'tool_dataflows'));
-                return false;
+                return $input;
             }
 
             try {
@@ -163,8 +169,8 @@ class connector_s3 extends flow_step {
                     'Key' => $target,
                 ]);
             } catch (\Aws\S3\Exception\S3Exception $e) {
-                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows'));
-                return false;
+                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows', $e->getAwsErrorMessage()));
+                return $input;
             } finally {
                 fclose($stream);
             }
@@ -180,8 +186,8 @@ class connector_s3 extends flow_step {
                     'SaveAs' => $target,
                 ]);
             } catch (\Aws\S3\Exception\S3Exception $e) {
-                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows'));
-                return false;
+                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows', $e->getAwsErrorMessage()));
+                return $input;
             }
         }
 
@@ -195,12 +201,12 @@ class connector_s3 extends flow_step {
                     'Key'        => $target,
                 ]);
             } catch (\Aws\S3\Exception\S3Exception $e) {
-                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows'));
-                return false;
+                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows', $e->getAwsErrorMessage()));
+                return $input;
             }
         }
 
-        return true;
+        return $input;
     }
 
     /**

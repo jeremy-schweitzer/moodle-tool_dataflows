@@ -163,7 +163,7 @@ class connector_s3 extends connector_step {
                     'Key' => $target,
                 ]);
             } catch (\Aws\S3\Exception\S3Exception $e) {
-                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows'));
+                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows', $e->getAwsErrorMessage()));
                 return false;
             } finally {
                 fclose($stream);
@@ -180,7 +180,7 @@ class connector_s3 extends connector_step {
                     'SaveAs' => $target,
                 ]);
             } catch (\Aws\S3\Exception\S3Exception $e) {
-                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows'));
+                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows', $e->getAwsErrorMessage()));
                 return false;
             }
         }
@@ -195,7 +195,7 @@ class connector_s3 extends connector_step {
                     'Key'        => $target,
                 ]);
             } catch (\Aws\S3\Exception\S3Exception $e) {
-                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows'));
+                $this->enginestep->log(get_string('s3_copy_failed', 'tool_dataflows', $e->getAwsErrorMessage()));
                 return false;
             }
         }
@@ -234,8 +234,6 @@ class connector_s3 extends connector_step {
         foreach ([
             'bucket',
             'region',
-            'key',
-            'secret',
             'source',
             'target',
         ] as $field) {
