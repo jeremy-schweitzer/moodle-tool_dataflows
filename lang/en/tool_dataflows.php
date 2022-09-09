@@ -112,6 +112,7 @@ $string['step_name_connector_curl'] = 'Curl connector';
 $string['step_name_connector_debugging'] = 'Debugging connector';
 $string['step_name_connector_email'] = 'Email notification';
 $string['step_name_flow_s3'] = 'S3 file copy';
+$string['step_name_flow_hash_file'] = 'Hash file';
 $string['step_name_connector_s3'] = 'S3 file copy';
 $string['step_name_connector_sns_notify'] = 'AWS-SNS Notification';
 $string['step_name_connector_wait'] = 'Wait';
@@ -336,6 +337,11 @@ $string['connector_email:sending_message'] = 'Sending email to <{$a}>';
 $string['connector_email:subject'] = 'Subject';
 $string['connector_email:to'] = 'Recipeints email address';
 $string['connector_email:name'] = 'Recipients name';
+
+// Hash file.
+$string['flow_hash_file:path'] = 'Path to file';
+$string['flow_hash_file:algorithm'] = 'Algorithm';
+$string['flow_hash_file:algorithm_help'] = 'Name of selected hashing algorithm. Available algorithms include: {$a}';
 
 // S3 File Copy.
 $string['connector_s3:bucket'] = 'Bucket';
