@@ -57,6 +57,8 @@ function tool_dataflows_step_types() {
         new step\connector_s3,
         new step\flow_s3,
         new step\connector_wait,
+        new step\flow_abort,
+        new step\flow_copy_file,
         new step\flow_email,
         new step\flow_hash_file,
         new step\flow_logic_switch,
