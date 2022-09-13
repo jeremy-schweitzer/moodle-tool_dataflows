@@ -56,7 +56,7 @@ class connector_file_exists extends connector_step {
      *
      * @return bool Returns true if successful, false otherwise.
      */
-    public function execute(): bool {
+    public function execute($input = null) {
         $config = $this->get_config();
 
         $path = $this->enginestep->engine->resolve_path($config->path);

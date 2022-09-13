@@ -102,7 +102,7 @@ class flow_s3 extends flow_step {
      *
      * @return mixed
      */
-    public function execute($input) {
+    public function execute($input = null) {
         global $CFG;
         // Engine step contains the execution context, configuration, variables etc.
 

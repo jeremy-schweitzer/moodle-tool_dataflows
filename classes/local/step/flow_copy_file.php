@@ -67,7 +67,7 @@ class flow_copy_file extends flow_step {
      *
      * @return bool Returns true if successful, false otherwise.
      */
-    public function execute($input) {
+    public function execute($input = null) {
         global $CFG;
 
         $config = $this->get_config();

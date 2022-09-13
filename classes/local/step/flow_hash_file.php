@@ -76,7 +76,7 @@ class flow_hash_file extends flow_step {
      *
      * @return bool Returns true if successful, false otherwise.
      */
-    public function execute($input) {
+    public function execute($input = null) {
         $config = $this->get_config();
         $filename = $this->enginestep->engine->resolve_path($config->path);
         $hash = hash_file($config->algorithm, $filename);
