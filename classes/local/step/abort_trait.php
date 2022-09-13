@@ -41,17 +41,19 @@ trait abort_trait {
     public function execute($input = null) {
         $config = $this->get_config();
 
-        // If the condition was left empty (e.g. empty string), it should always abort.
-        if ($config->condition === '') {
-            throw new \Exception('Aborting');
-        }
-
         // If a condition was set, it should not abort if the result is false. be evaluated and abort if 'true'.
         if ($config->condition === false) {
             return $input;
         }
-        var_dump($config->condition);
 
+        // If the condition was set, print out the results of the expression so it's obvious what it had evaluated to.
+        if ($config->condition !== '') {
+            $rawconfig = $this->get_raw_config();
+            $strresult = var_export($config->condition, true);
+            $this->log("Aborting dataflow due to the expression returning '{$strresult}': {$rawconfig->condition}");
+        }
+
+        // By default, it should abort the step.
         throw new \Exception('Aborting');
     }
 
@@ -62,16 +64,16 @@ trait abort_trait {
      */
     public static function form_define_fields(): array {
         return [
-            'condition' => ['type' => PARAM_TEXT, 'required' => true],
+            'condition' => ['type' => PARAM_TEXT, 'required' => false],
         ];
     }
 
     /**
-     * Inputs
+     * Custom form inputs
      *
      * @param \MoodleQuickForm $mform
      */
     public function form_add_custom_inputs(\MoodleQuickForm &$mform) {
-        $mform->addElement('text', 'config_condition', get_string('connector_abort_if:condition', 'tool_dataflows'));
+        $mform->addElement('text', 'config_condition', get_string('connector_abort:condition', 'tool_dataflows'));
     }
 }
